@@ -41,7 +41,7 @@ namespace AWUserInterface
                 userControlsFlowLayoutPanel.Controls.Add(productViewer);
 
                 Random r = new Random();
-                int random = productModelIDs[r.Next(1, productModelIDs.Count)];
+                int random = productModelIDs[r.Next(0, productModelIDs.Count)];
 
                 if (randomNumbers.Count == productModelIDs.Count)
                 {

@@ -50,18 +50,18 @@ namespace AWProductViewer
                 sizes = removeDuplicates(sizes);
                 colors = removeDuplicates(colors);
 
-                productIDTextBox.Text = products[0].ProductModel;
                 productNameTextBox.Text = products[0].Name;
+                productIDTextBox.Text = products[0].ProductModel;
 
                 createButtons();
-                refreshInfo();
                 setImage();
             }
         }
 
         private void setImage()
         {
-            ProductImage productImage = DataAccess.GetImage(ProductModel, selectedColor.Text);
+            ProductImage productImage = new ProductImage();
+            productImage = DataAccess.GetImage(ProductModel, selectedColor.Text);
             byte[] photo = productImage.LargePhoto;
             MemoryStream ms = new MemoryStream(photo);
             Image image = Image.FromStream(ms);
@@ -75,8 +75,7 @@ namespace AWProductViewer
                 if ((p.Size == selectedSize.Text) && (p.Color == selectedColor.Text))
                 {
                     productNameTextBox.Text = p.Name;
-                    productIDTextBox.Text = p.ProductModel;
-                    setImage();
+                    productIDTextBox.Text = p.ProductModel; 
                 }
             }
         }
