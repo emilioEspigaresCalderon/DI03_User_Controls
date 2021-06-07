@@ -14,7 +14,6 @@ namespace AWUserInterface
     public partial class Form1 : Form
     {
         List<int> productModelIDs = new List<int>();
-        List<int> randomNumbers = new List<int>();
         public Form1()
         {
             InitializeComponent();
@@ -41,35 +40,17 @@ namespace AWUserInterface
                 userControlsFlowLayoutPanel.Controls.Add(productViewer);
 
                 Random r = new Random();
-                int random = productModelIDs[r.Next(0, productModelIDs.Count)];
+                int random = r.Next(productModelIDs.Count);
 
-                if (randomNumbers.Count == productModelIDs.Count)
+                if (productModelIDs.Count == 0)
                 {
                     MessageBox.Show("Showing all available products");
                     i = 2;
                 }
                 else { 
-                    if (randomNumbers.Count == 0)
-                    {
-                        randomNumbers.Add(random);
-                        productViewer.ProductModel = random;
-                        i++;
-                    }
-                    else
-                    {
-                        int dif = 0;
-                        foreach (int k in randomNumbers)
-                        {
-                            if (random != k)
-                                dif++;
-                        }
-                        if (dif == randomNumbers.Count)
-                        {
-                            randomNumbers.Add(random);
-                            productViewer.ProductModel = random;
-                            i++;
-                        }
-                    }
+                    productViewer.ProductModel = productModelIDs[random];
+                    productModelIDs.RemoveAt(random);
+                    i++;
                 }
             }
         }

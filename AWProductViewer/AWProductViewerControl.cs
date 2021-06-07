@@ -14,6 +14,7 @@ namespace AWProductViewer
     public partial class AWProductViewerControl : UserControl
     {
         List<Product> products = new List<Product>();
+        Product p = new Product();
         List<string> sizes = new List<string>();
         List<string> colors = new List<string>();
         Button selectedSize = new Button();
@@ -37,24 +38,30 @@ namespace AWProductViewer
         }
         
         private void showProductModelInfo()
-        {            
-            if (ProductModel != 0)
+        {       
+            if (ProductModel != 128)
             {
                 products = DataAccess.getProductModel(ProductModel);
-
-                foreach (Product p in products)
-                {
-                    sizes.Add(p.Size);
-                    colors.Add(p.Color);
-                }
-                sizes = removeDuplicates(sizes);
-                colors = removeDuplicates(colors);
-
                 productNameTextBox.Text = products[0].Name;
                 productIDTextBox.Text = products[0].ProductModel;
 
+                foreach (Product p in products)
+                {
+                     sizes.Add(p.Size);
+                     colors.Add(p.Color);
+                }
+
+                sizes = removeDuplicates(sizes);
+                colors = removeDuplicates(colors);
                 createButtons();
                 setImage();
+            }
+            if (ProductModel == 128)
+            {
+                p = DataAccess.get128(ProductModel);
+                productNameTextBox.Text = p.Name;
+                productIDTextBox.Text = p.ProductModel;
+                MessageBox.Show("YAY");
             }
         }
 
@@ -115,15 +122,14 @@ namespace AWProductViewer
                 else
                     sizeButton.Text = s;
 
-                sizeButton.Click += buttonSize_Click;
-
                 if (x == 0)
                 {
                     sizeButton.BackColor = Color.DarkGray;
                     selectedColor = sizeButton;
+                    x++;
                 }
-                x++;
 
+                sizeButton.Click += buttonSize_Click;
                 sizeFlowLayoutPanel.Controls.Add(sizeButton);
             }
 
@@ -136,15 +142,14 @@ namespace AWProductViewer
                 else
                     colorButton.Text = c;
 
-                colorButton.Click += buttonColor_Click;
-
                 if (y == 0)
                 {
                     colorButton.BackColor = Color.DarkGray;
                     selectedColor = colorButton;
+                    y++;
                 }
-                y++;
 
+                colorButton.Click += buttonColor_Click;
                 colorFlowLayoutPanel.Controls.Add(colorButton);
             }
         }

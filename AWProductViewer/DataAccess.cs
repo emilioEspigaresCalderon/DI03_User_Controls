@@ -12,7 +12,6 @@ namespace AWProductViewer
 {
     class DataAccess
     {
-        
         public static List<Product> getProductModel(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["AdventureWorks2016"].ConnectionString;
@@ -20,7 +19,6 @@ namespace AWProductViewer
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
                 List<Product> products = new List<Product>();
-
                 string select = "SELECT DISTINCT " +
                         "Production.ProductModel.ProductModelID, " +
                         "Production.Product.ProductID AS ProductModel, " +
@@ -33,9 +31,22 @@ namespace AWProductViewer
                         "INNER JOIN Production.ProductModel ON Production.Product.ProductModelID = Production.ProductModel.ProductModelID " +
                         "INNER JOIN Production.ProductModelProductDescriptionCulture ON Production.ProductModel.ProductModelID = Production.ProductModelProductDescriptionCulture.ProductModelID " +
                         "INNER JOIN Production.ProductDescription ON Production.ProductModelProductDescriptionCulture.ProductDescriptionID = Production.ProductDescription.ProductDescriptionID " +
-                        $"WHERE ProductModelProductDescriptionCulture.CultureID = 'en' AND Product.ProductModelID IS NOT NULL AND Production.ProductModel.ProductModelId = '{ id }' ORDER BY ProductModel";
+                        $"WHERE Product.ProductModelID IS NOT NULL AND Production.ProductModel.ProductModelId = '{ id }' ORDER BY ProductModel";
                 products = connection.Query<Product>(select).ToList();
                 return products;
+            }
+        }
+
+        public static Product get128(int id)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["AdventureWorks2016"].ConnectionString;
+
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                Product product = new Product();
+                string select = "SELECT ProductModelID, ProductID, Name, Size, Color FROM Production.Product WHERE ProductModelID = '128'";
+                product = connection.Query<Product>(select).FirstOrDefault();
+                return product;
             }
         }
 
@@ -50,8 +61,7 @@ namespace AWProductViewer
                 if (color != "NULL")
                 {
                     select = "SELECT " +
-                            "Product.ProductId, Name, ProductPhoto.ProductPhotoID, " +
-                            "LargePhoto, LargePhotoFileName " +
+                            "LargePhoto " +
                             "FROM " +
                             "Production.Product " +
                             "INNER JOIN Production.ProductProductPhoto ON Product.ProductID=ProductProductPhoto.ProductID " +
@@ -60,8 +70,7 @@ namespace AWProductViewer
                 } else
                 {
                     select = "SELECT " +
-                            "Product.ProductId, Name, ProductPhoto.ProductPhotoID, " +
-                            "LargePhoto, LargePhotoFileName " +
+                            "LargePhoto " +
                             "FROM " +
                             "Production.Product " +
                             "INNER JOIN Production.ProductProductPhoto ON Product.ProductID=ProductProductPhoto.ProductID " +
