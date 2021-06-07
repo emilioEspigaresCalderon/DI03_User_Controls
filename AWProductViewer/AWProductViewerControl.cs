@@ -61,7 +61,6 @@ namespace AWProductViewer
                 p = DataAccess.get128(ProductModel);
                 productNameTextBox.Text = p.Name;
                 productIDTextBox.Text = p.ProductModel;
-                MessageBox.Show("YAY");
             }
         }
 
